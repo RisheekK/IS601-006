@@ -10,8 +10,8 @@ def process_array(num, arr):
     print(arr)
     print("\nOdds output:\n")
     # TODO add necessary print statement to output only the odd values (hint, best if shown as a single line)
-
-    dict = {}
+    
+    dict = {}                                              # Using Dictionary to verify if the odd number is already specified before in our output
     for i in arr:
         if i%2 != 0:
             if i not in dict:

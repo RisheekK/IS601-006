@@ -11,14 +11,15 @@ def process_array(num, arr):
     # TODO add new code here to print the desired result
 
     for i in arr:
-        if type(i) == int:
+        if type(i) == int:                              #to check if the value is integer
             print(abs(i), end=' ')
-        elif type(i) == float:
-            i = float(i)
+        elif type(i) == float:                          #to check if the value is float
             print(abs(i), end=' ')
-        elif type(i) == str:
-            i = int(i)
-            print(abs(i), end=' ')
+        elif type(i) == str:                            #to check if the value is String
+            i = f"{abs(int(i))}"                        #to make sure the ouput is also string
+            print((i), end=' ')
+    
+    print(type(i))                                      #to mention the data type of the output
 
 
 
