@@ -66,18 +66,8 @@ def add_task(name: str, description: str, due: str):
     task["description"] = description
 
     format = ("%m/%d/%y %H:%M:%S","%Y-%m-%d %H:%M:%S")
-    val = True
-    truth = 0
-
-    for i in format:
-        try:
-            val = bool(datetime.strptime(due, i))
-        except ValueError:
-            val = False
-        if val is True:
-            truth += 1
         
-    if truth > 0 :
+    try:
         task["due"] = str_to_datetime(due)
         fields_not_available = []
         for i in task:
@@ -92,15 +82,16 @@ def add_task(name: str, description: str, due: str):
             output = f'The new task has not been added due to misssing fields {fields_not_available}'
             print(output)
 
-    else:
-        print("the due date does not match the required format : yyyy-mm-dd hh:mm:ss (or) mm/dd/yy hh:mm:ss")
+    except:
+        print(f"The due date does not match the required format : {format}\n No tasks were added")
 
     save()
+
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     ''' rr284 feb 19
-        to check if 'due' input has the correct date time format ive used exception handling in a for loop.
-        if the input adheres to one of the given format then Truth will be greater than zero in which case the code will run
-        else an "error message" is displayed to the user.
+        used Try and Except to handle the format error of 'due'. 
+        If the format does not match then the Print statement in the except will run.
+        No 
 
         i have used for loop to check if a field is missing a value and store in fields_not_available 
         then if the fields_not_available is empty success message is shown 
@@ -112,13 +103,28 @@ def process_update(index):
     # get the task by index
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # show the existing value of each property where the TODOs are marked in the text of the inputs (replace the TODO related text)
+
+    
+    if index < 0:
+        print(f'Provided index number {index + 1} is negative')
+    elif index > len(tasks):
+        print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}')
+    else:
+        task = tasks[index]
+        n = task["name"]
+        d = task["description"]
+        t = task["due"]
+
+        name = input(f"What's the name of this task? ({n})) \n").strip()
+        desc = input(f"What's a brief descriptions of this task? ({d}) \n").strip()
+        due = input(f"When is this task due (format: m/d/y H:M:S) ({t}) \n").strip()
+        update_task(index, name=name, description=desc, due=due)
+
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
     
     
-    name = input(f"What's the name of this task? (TODO name) \n").strip()
-    desc = input(f"What's a brief descriptions of this task? (TODO description) \n").strip()
-    due = input(f"When is this task due (format: m/d/y H:M:S) (TODO due) \n").strip()
-    update_task(index, name=name, description=desc, due=due)
+    '''
 
 def update_task(index: int, name: str, description:str, due: str):
     """ Updates the name, description , due date of a task found by index if an update to the property was provided """
@@ -128,9 +134,37 @@ def update_task(index: int, name: str, description:str, due: str):
     # update lastActivity with the current datetime value
     # output that the task was updated if any items were changed, otherwise mention task was not updated
     # make sure save() is still called last in this function
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     
+    task = tasks[index]
+    fields_not_changed = []
+
+    if name != '':
+        task["name"] = name
+    else:
+        fields_not_changed.append("name")
+    if description != '':
+        task["description"] = description
+    else:
+        fields_not_changed.append("description")
+    if due != '':
+        task["due"] = due
+    else:
+        fields_not_changed.append("Due")
+
+    task["lastActivity"] = datetime.now()
+    tasks[index] = task
+
+    if len(fields_not_changed) > 0:
+        print(f"Fields that were not changed: {fields_not_changed}")
+
     save()
+
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
+        storing the chosen task in 'task'
+    
+    '''
+    
 
 def mark_done(index):
     """ Updates a single task, via index, to a done datetime"""
@@ -139,9 +173,23 @@ def mark_done(index):
     # if it's not done, record the current datetime as the value
     # if it is done, print a message saying it's already completed
     # make sure save() is still called last in this function
+
+    if index < 0:
+        print(f'Provided index number {index + 1} is negative\n')
+    elif index > len(tasks):
+        print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
+    else:
+        task = tasks[index]
+        if task["done"] == False:
+            task["done"] = datetime.now()
+        else:
+            print("The task is already completed\n")
+            
+    save()
+    
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
 
-    save()
+    
 
 def view_task(index):
     """ View more info about a specific task fetch by index """
@@ -149,14 +197,20 @@ def view_task(index):
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # utilize the given print statement when a task is found
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    task = {}
-    print(f"""
-        [{'x' if task['done'] else ' '}] Task: {task['name']}\n 
-        Description: {task['description']} \n 
-        Last Activity: {task['lastActivity']} \n
-        Due: {task['due']}\n
-        Completed: {task['done'] if task['done'] else '-'} \n
-        """.replace('  ', ' '))
+    if index < 0:
+        print(f'Provided index number {index + 1} is negative\n')
+    elif index > len(tasks):
+        print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
+    else:
+        task = {}
+        task = tasks[index]
+        print(f"""
+            [{'x' if task['done'] else ' '}] Task: {task['name']}\n 
+            Description: {task['description']} \n 
+            Last Activity: {task['lastActivity']} \n
+            Due: {task['due']}\n
+            Completed: {task['done'] if task['done'] else '-'} \n
+            """.replace('  ', ' '))
 
 
 def delete_task(index):
@@ -166,7 +220,16 @@ def delete_task(index):
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    
+
+    if index < 0:
+        print(f'Provided index number {index + 1} is negative. No task(s) were deleted\n')
+    elif index > len(tasks):
+        print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}. No task(s) were deleted\n')
+    else:
+        name = tasks[index]['name']
+        del tasks[index]
+        print(f"The task {index+1} - {name} is successfully deleted")
+        
     save()
 
 def get_incomplete_tasks():
@@ -175,6 +238,9 @@ def get_incomplete_tasks():
     # pass that list into list_tasks()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     _tasks = []
+    for i in range(len(tasks)):
+        if tasks[i]['done'] == False:
+            _tasks.append(tasks[i])
     list_tasks(_tasks)
 
 def get_overdue_tasks():
@@ -219,7 +285,7 @@ def run():
     load()
     print_options()
     while(True):
-        opt = input("What would you like to do?\n").strip() # strip removes whitespace from beginning/end
+        opt = input("\nWhat would you like to do?\n").strip() # strip removes whitespace from beginning/end
         if opt not in command_list:
             print("That's not a valid option")
         elif opt == "add":
