@@ -61,14 +61,14 @@ def add_task(name: str, description: str, due: str):
     # add the new task to the tasks list
     # output a message confirming the new task was added or if the addition was rejected due to missing data
     # make sure save() is still called last in this function
-    task["lastActivity"] = datetime.now()
+    task["lastActivity"] = f'{datetime.now()}'
     task["name"] = name
     task["description"] = description
 
     format = ("%m/%d/%y %H:%M:%S","%Y-%m-%d %H:%M:%S")
         
     try:
-        task["due"] = str_to_datetime(due)
+        task["due"] = f'{str_to_datetime(due)}'
         fields_not_available = []
         for i in task:
             if task[i] is None or task[i] == '':
@@ -136,26 +136,28 @@ def update_task(index: int, name: str, description:str, due: str):
     # make sure save() is still called last in this function
     
     task = tasks[index]
-    fields_not_changed = []
+    fields_changed = []
 
-    if name != '':
+    if name != '' and name != task["name"]:
         task["name"] = name
-    else:
-        fields_not_changed.append("name")
-    if description != '':
+        fields_changed.append("name")
+    if description != '' and description != task["description"]:
         task["description"] = description
-    else:
-        fields_not_changed.append("description")
-    if due != '':
-        task["due"] = due
-    else:
-        fields_not_changed.append("Due")
+        fields_changed.append("description")
+    if due != '' and due != task["due"]:
+        try:
+            task["due"] = f'{str_to_datetime(due)}'
+            fields_changed.append("Due")
+        except:
+            print("The value provided for Due does not match the correct format.\n Due date has not been changed.")
 
     task["lastActivity"] = datetime.now()
     tasks[index] = task
 
-    if len(fields_not_changed) > 0:
-        print(f"Fields that were not changed: {fields_not_changed}")
+    if len(fields_changed) > 0:
+        print(f"Fields that were changed: {fields_changed}")
+    else:
+        print("The task was not updated")
 
     save()
 
@@ -249,6 +251,14 @@ def get_overdue_tasks():
     # pass that list into list_tasks()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     _tasks = []
+    now = datetime.now()
+    x = str(now).split('.')[0]
+
+    for i in range(len(tasks)):
+        conv = str_to_datetime(tasks[i]['due'])
+        if conv < str_to_datetime(x):
+            _tasks.append(tasks[i])
+
     list_tasks(_tasks)
 
 def get_time_remaining(index):
@@ -259,7 +269,30 @@ def get_time_remaining(index):
     # display the remaining time via print in a clear format showing days, hours, minutes, seconds
     # if the due date is in the past print out how many days, hours, minutes, seconds the task is over due (clearly note that it's over due, values should be positive)
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-    task = {}
+    if index < 0:
+        print(f'Provided index number {index + 1} is negative\n')
+    elif index > len(tasks):
+        print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
+    else:
+        now = datetime.now()
+        time = str_to_datetime(tasks[index]['due']) - now
+        timediff = abs(time)
+        timediffsecs = timediff.days * 24 * 3600 + time.seconds
+
+        mins, secs = divmod(timediffsecs,60)
+        hours, mins = divmod(mins, 60)
+        days, hours = divmod(hours, 24)
+        
+        if time.days > 0:
+            print(f"Time left : {days} days, {hours} hours, {mins} minutes, {secs} seconds.")
+        else:
+            print(f"Overdue : {days} days, {hours} hours, {mins} minutes, {secs} seconds.")
+
+
+    #source: https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-37.php
+
+
+
 
 # no changes needed below this line
 
