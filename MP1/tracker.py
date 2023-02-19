@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import os
+#from typing import Self
 
 tasks = []
 # constant, don't edit, use .copy()
@@ -60,8 +61,47 @@ def add_task(name: str, description: str, due: str):
     # add the new task to the tasks list
     # output a message confirming the new task was added or if the addition was rejected due to missing data
     # make sure save() is still called last in this function
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    task["lastActivity"] = datetime.now()
+    task["name"] = name
+    task["description"] = description
+
+    format = ("%m/%d/%y %H:%M:%S","%Y-%m-%d %H:%M:%S")
+    val = True
+    truth = 0
+
+    for i in format:
+        try:
+            val = bool(datetime.strptime(due, i))
+        except ValueError:
+            val = False
+        if val is True:
+            truth += 1
+        
+    if truth > 0 :
+        task["due"] = str_to_datetime(due)
+        fields_not_available = []
+        for i in task:
+            if task[i] is None or task[i] == '':
+                fields_not_available.append(i) 
+
+        if not fields_not_available:
+            tasks.append(task)
+            output = f'The new task was added successfully {task}'
+            print(output)
+        else:
+            output = f'The new task has not been added due to misssing fields {fields_not_available}'
+            print(output)
+
+    else:
+        print("the due date does not match the required format : yyyy-mm-dd hh:mm:ssadd")
+
     save()
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    ''' rr284 feb 19
+        i have used for loop to check if a field is missing a value and store in fields_not_available 
+        then if the fields_not_available is empty success message is shown 
+        if its not "not added" message is shown along with the missing fields
+    '''
 
 def process_update(index):
     """ extracted the user input prompts to get task data then passes it to update_task() """
