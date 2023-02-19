@@ -93,11 +93,15 @@ def add_task(name: str, description: str, due: str):
             print(output)
 
     else:
-        print("the due date does not match the required format : yyyy-mm-dd hh:mm:ssadd")
+        print("the due date does not match the required format : yyyy-mm-dd hh:mm:ss (or) mm/dd/yy hh:mm:ss")
 
     save()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     ''' rr284 feb 19
+        to check if 'due' input has the correct date time format ive used exception handling in a for loop.
+        if the input adheres to one of the given format then Truth will be greater than zero in which case the code will run
+        else an "error message" is displayed to the user.
+
         i have used for loop to check if a field is missing a value and store in fields_not_available 
         then if the fields_not_available is empty success message is shown 
         if its not "not added" message is shown along with the missing fields
@@ -109,6 +113,7 @@ def process_update(index):
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # show the existing value of each property where the TODOs are marked in the text of the inputs (replace the TODO related text)
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    
     
     name = input(f"What's the name of this task? (TODO name) \n").strip()
     desc = input(f"What's a brief descriptions of this task? (TODO description) \n").strip()
