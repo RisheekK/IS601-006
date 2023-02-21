@@ -76,7 +76,9 @@ def add_task(name: str, description: str, due: str):
 
         if not fields_not_available:
             tasks.append(task)
-            output = f'The new task was added successfully {task}'
+            output = f'\nThe new task was added successfully\n\nname: {task["name"]}\n\
+Description: {task["description"]}\nDue: {task["due"]}\n\
+Lastactivity: {task["lastActivity"]}\nDone:{task["done"]}'
             print(output)
         else:
             output = f'The new task has not been added due to misssing fields {fields_not_available}'
@@ -91,7 +93,6 @@ def add_task(name: str, description: str, due: str):
     ''' rr284 feb 19
         used Try and Except to handle the format error of 'due'. 
         If the format does not match then the Print statement in the except will run.
-        No 
 
         i have used for loop to check if a field is missing a value and store in fields_not_available 
         then if the fields_not_available is empty success message is shown 
@@ -107,7 +108,7 @@ def process_update(index):
     
     if index < 0:
         print(f'Provided index number {index + 1} is negative')
-    elif index > len(tasks):
+    elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}')
     else:
         task = tasks[index]
@@ -178,7 +179,7 @@ def mark_done(index):
 
     if index < 0:
         print(f'Provided index number {index + 1} is negative\n')
-    elif index > len(tasks):
+    elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
     else:
         task = tasks[index]
@@ -201,7 +202,7 @@ def view_task(index):
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     if index < 0:
         print(f'Provided index number {index + 1} is negative\n')
-    elif index > len(tasks):
+    elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
     else:
         task = {}
@@ -225,7 +226,7 @@ def delete_task(index):
 
     if index < 0:
         print(f'Provided index number {index + 1} is negative. No task(s) were deleted\n')
-    elif index > len(tasks):
+    elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}. No task(s) were deleted\n')
     else:
         name = tasks[index]['name']
@@ -271,7 +272,7 @@ def get_time_remaining(index):
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     if index < 0:
         print(f'Provided index number {index + 1} is negative\n')
-    elif index > len(tasks):
+    elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
     else:
         now = datetime.now()
