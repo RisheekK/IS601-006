@@ -107,7 +107,7 @@ def process_update(index):
 
     
     if index < 0:
-        print(f'Provided index number {index + 1} is negative')
+        print(f'Provided index number {index + 1} is zero or negative')
     elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}')
     else:
@@ -123,8 +123,9 @@ def process_update(index):
 
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     '''rr284 feb 19
-    
-    
+        if the index is out of bounds an appropriate message is given.
+        when an available index is given we proceed with the code where the current values for 
+        the fields are displayed next to the question
     '''
 
 def update_task(index: int, name: str, description:str, due: str):
@@ -150,13 +151,13 @@ def update_task(index: int, name: str, description:str, due: str):
             task["due"] = f'{str_to_datetime(due)}'
             fields_changed.append("Due")
         except:
-            print("The value provided for Due does not match the correct format.\n Due date has not been changed.")
+            print("The value provided for Due does not match the correct format.\nDue date has not been changed.")
 
     task["lastActivity"] = datetime.now()
     tasks[index] = task
 
     if len(fields_changed) > 0:
-        print(f"Fields that were changed: {fields_changed}")
+        print(f"Success. Fields that were changed: {fields_changed}")
     else:
         print("The task was not updated")
 
@@ -164,8 +165,11 @@ def update_task(index: int, name: str, description:str, due: str):
 
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     '''rr284 feb 19
-        storing the chosen task in 'task'
-    
+        storing the chosen task in 'task'.
+        if the given value is null or the same as the existing value then the field is not updated.
+        once a field is updated the field name is stored in 'fields_changed' lsit.
+        when 'fields_changed' is empty which would imply that no changes were made therefore th task is updated.
+        else the the fields that were updated will be displayed.
     '''
     
 
@@ -178,20 +182,28 @@ def mark_done(index):
     # make sure save() is still called last in this function
 
     if index < 0:
-        print(f'Provided index number {index + 1} is negative\n')
+        print(f'Provided index number {index + 1} is 0 or negative\n')
     elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
     else:
         task = tasks[index]
+        name = task["name"]
         if task["done"] == False:
             task["done"] = datetime.now()
+            print(f"the task no.{index+1} {name} has been marked done")
         else:
-            print("The task is already completed\n")
+            print(f"The {name} task is already completed\n")
             
     save()
     
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
-
+    '''rr284 feb 19
+        index is first checked for out of bounds.
+        "done" field is checked if it False. in this case the task is not done.
+        therefore the current time is stored.
+        if it is not false then the value was changed therefore we can assume that
+        the task was already done.
+    '''
     
 
 def view_task(index):
@@ -199,9 +211,8 @@ def view_task(index):
     # find task from list by index
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # utilize the given print statement when a task is found
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     if index < 0:
-        print(f'Provided index number {index + 1} is negative\n')
+        print(f'Provided index number {index + 1} is 0 or negative\n')
     elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
     else:
@@ -214,7 +225,12 @@ def view_task(index):
             Due: {task['due']}\n
             Completed: {task['done'] if task['done'] else '-'} \n
             """.replace('  ', ' '))
-
+        
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
+        Index is checked for out of bounds.
+        if it does not match then an appropriate message is displayed.
+    '''
 
 def delete_task(index):
     """ deletes a task from the tasks list by index """
@@ -222,10 +238,9 @@ def delete_task(index):
     # message should show if it was successful or not
     # consider index out of bounds scenarios and include appropriate message(s) for invalid index
     # make sure save() is still called last in this function
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
 
     if index < 0:
-        print(f'Provided index number {index + 1} is negative. No task(s) were deleted\n')
+        print(f'Provided index number {index + 1} is zero or negative. No task(s) were deleted\n')
     elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}. No task(s) were deleted\n')
     else:
@@ -235,22 +250,40 @@ def delete_task(index):
         
     save()
 
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
+        Checking for out of bounds. 
+        if index lies outside appropriate messages are displayed
+        when a valid index is provided the task is deleted from the list and a success message is displayed.
+    '''
+
 def get_incomplete_tasks():
     """ prints a list of tasks that are not done """
     # generate a list of tasks where the task is not done
     # pass that list into list_tasks()
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    
     _tasks = []
     for i in range(len(tasks)):
         if tasks[i]['done'] == False:
             _tasks.append(tasks[i])
-    list_tasks(_tasks)
+    if not _tasks:
+        print("There are no tasks that are incomplete")
+    else:
+        list_tasks(_tasks)
+
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
+        for loop is used to check value for Key "done".
+        if its false then the task is not completed and the task is appended to the '_tasks' list.
+        if the list is empty it implies that there are no tasks that are incomplete.
+        if the list is not empty then the _tasks list is given in the list_tasks funtion.
+    '''
 
 def get_overdue_tasks():
     """ prints a list of tasks that are over due completion (not done and expired) """
     # generate a list of tasks where the due date is older than now and that are not complete
     # pass that list into list_tasks()
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    
     _tasks = []
     now = datetime.now()
     x = str(now).split('.')[0]
@@ -260,7 +293,22 @@ def get_overdue_tasks():
         if conv < str_to_datetime(x):
             _tasks.append(tasks[i])
 
-    list_tasks(_tasks)
+    if not _tasks:
+        print("There are no tasks that are overdue")
+    else:
+        print("The task that are overdue:\n")
+        list_tasks(_tasks)
+
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
+        two variables now and x are used to obtain the current date and time in the required format.
+        for loop is used to run through each task in 'tasks' list.
+        conv is the due date and str_to_datetime(x) is the current day and time.
+        these 2 can be compared since both are in datetime datatype.
+        if the due is less than our current date and time then its appended in the _tasks list.
+        if the list is not empty then the _tasks list is given in the list_tasks funtion.
+        if it is empty it implies that not task is overdue
+    '''
 
 def get_time_remaining(index):
     """ outputs the number of days, hours, minutes, seconds a task has before it's overdue otherwise shows similar info for how far past due it is """
@@ -269,9 +317,9 @@ def get_time_remaining(index):
     # get the days, hours, minutes, seconds between the due date and now
     # display the remaining time via print in a clear format showing days, hours, minutes, seconds
     # if the due date is in the past print out how many days, hours, minutes, seconds the task is over due (clearly note that it's over due, values should be positive)
-    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+
     if index < 0:
-        print(f'Provided index number {index + 1} is negative\n')
+        print(f'Provided index number {index + 1} is zero or negative\n')
     elif index >= len(tasks):
         print(f'Provided index number {index + 1} is greater than the available number of tasks {len(tasks)}\n')
     else:
@@ -285,10 +333,31 @@ def get_time_remaining(index):
         days, hours = divmod(hours, 24)
         
         if time.days > 0:
-            print(f"Time left : {days} days, {hours} hours, {mins} minutes, {secs} seconds.")
+            print(f"Time left for task - {tasks[index]['name']}: {days} days, {hours} hours, {mins} minutes, {secs} seconds.")
         else:
-            print(f"Overdue : {days} days, {hours} hours, {mins} minutes, {secs} seconds.")
+            print(f"Overdue for task - {tasks[index]['name']}: {days} days, {hours} hours, {mins} minutes, {secs} seconds.")
 
+    # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
+    '''rr284 feb 19
+        first we check if the index is out of bounds and if so approptiate messages are displayed.
+        in now the current time is stored
+        in 'time' the the difference between due and the present us stored
+        timediff is the absolute value of time since days and time can only be positive.
+        then we convert the time difference to seconds and store it in timediffsecs
+
+        later we use divmod method to figure out the seconds, minutes, hours and days.
+        It takes two numbers as arguments and returns their quotient and remainder in a tuple.
+        in this code"mins, secs = divmod(timediffsecs,60)" we save the quotient in mins and the remainder in secs.
+        we use similar code to calculate days, hours and minutes.
+
+        when time.days() is greater than zero it means the there still time left until due.
+        therefore the output is displayed as time left.
+        when time.days() is less than 0 it means the time diff is negative.
+        therefore the output is displayed as overdue.
+
+        source: https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-37.php
+        the above link has been useed as reference.
+    '''
 
     #source: https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-37.php
 
