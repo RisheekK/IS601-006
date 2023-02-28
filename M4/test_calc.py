@@ -124,3 +124,57 @@ def test_ans_mul_num():
     },]
     for d in data:
         assert calc.mul(d["a"], d["b"]) == calc._as_num(d["r"])
+
+def test_num_div_num():
+    """"rr284 feb 27 function tests the Division of 2 numbers"""
+    data = [{
+        "a":"10",
+        "b":"2.5",
+        "r":"4"
+    },
+    {
+        "a":"45",
+        "b":"-3",
+        "r":"-15"
+    },
+    {
+        "a":"-9",
+        "b":"-3",
+        "r":"3"
+    },
+    # Dividing by zero will keep the same answer while throwing an error msg
+    {
+        "a":"3",
+        "b":"0",
+        "r":"3"
+    },]
+    for d in data:
+        assert calc.div(d["a"], d["b"]) == calc._as_num(d["r"])
+
+def test_ans_div_num():
+    """"rr284 feb 27 function tests the Division of 2 numbers
+        ans is variable which contains the answer from a previous calculation"""
+    data = [{
+        "a":"ans",
+        "b":"0.25",
+        "r":"12"
+    },
+    {
+        "a":"ans",
+        "b":"2",
+        "r":"6"
+    },
+    {
+        "a":"ans",
+        "b":"-2",
+        "r":"-3"
+    },
+    # Dividing by zero will keep the same answer while throwing an error msg
+    {
+        "a":"ans",
+        "b":"0",
+        "r":"-3"
+    },]
+    for d in data:
+        assert calc.div(d["a"], d["b"]) == calc._as_num(d["r"])
+
