@@ -84,3 +84,43 @@ def test_ans_sub_num():
     for d in data:
         assert calc.sub(d["a"], d["b"]) == calc._as_num(d["r"])
 
+def test_num_mul_num():
+    """"rr284 feb 27 -  function tests the multiplication of 2 numbers"""
+    data = [{
+        "a":"6.0",
+        "b":"0",
+        "r":"0"
+    },
+    {
+        "a":"4",
+        "b":"5",
+        "r":"20"
+    },
+    {
+        "a":"-3",
+        "b":"4",
+        "r":"-12"
+    },]
+    for d in data:
+        assert calc.mul(d["a"], d["b"]) == calc._as_num(d["r"])
+
+def test_ans_mul_num():
+    """"rr284 feb 27 function tests the multiplication of 2 numbers
+        ans is variable which contains the answer from a previous calculation"""
+    data = [{
+        "a":"ans",
+        "b":"-2",
+        "r":"24"
+    },
+    {
+        "a":"ans",
+        "b":"1.5",
+        "r":"36.0"
+    },
+    {
+        "a":"ans",
+        "b":"0",
+        "r":"0"
+    },]
+    for d in data:
+        assert calc.mul(d["a"], d["b"]) == calc._as_num(d["r"])
