@@ -43,3 +43,44 @@ def test_ans_add_num():
     for d in data:
         assert calc.add(d["a"], d["b"]) == calc._as_num(d["r"])
 
+def test_num_sub_num():
+    """"rr284 feb 27 function tests the subtraction of 2 numbers """
+    data = [{
+        "a":"8",
+        "b":"5",
+        "r":"3"
+    },
+    {
+        "a":"7.5",
+        "b":"6",
+        "r":"1.5"
+    },
+    {
+        "a":"-10",
+        "b":"4",
+        "r":"-14"
+    },]
+    for d in data:
+        assert calc.sub(d["a"], d["b"]) == calc._as_num(d["r"])
+
+def test_ans_sub_num():
+    """"rr284 feb 27 - function tests the subtraction of 2 numbers
+        ans is variable which contains the answer from a previous calculation"""
+    data = [{
+        "a":"ans",
+        "b":"5",
+        "r":"-19"
+    },
+    {
+        "a":"ans",
+        "b":"6.5",
+        "r":"-25.5"
+    },
+    {
+        "a":"ans",
+        "b":"-5",
+        "r":"-20.5"
+    },]
+    for d in data:
+        assert calc.sub(d["a"], d["b"]) == calc._as_num(d["r"])
+
