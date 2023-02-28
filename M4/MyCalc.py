@@ -10,7 +10,7 @@ class MyCalc:
             return False
     
     def _is_float(self, val):
-        """UCID kc664 (02/26/23) - function checks if the input is a float"""
+        """rr284 feb 27 - function checks if the input is a float"""
         try:
             val = float(val)
             return True
