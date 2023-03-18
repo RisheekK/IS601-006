@@ -17,7 +17,7 @@ class Usable:
         self.quantity -= 1
         if (self.quantity < 0):
             raise OutOfStockException
-        return self.quantity 
+        return self.quantity
 
     def in_stock(self):
         return self.quantity > 0
@@ -50,7 +50,7 @@ class BurgerMachine:
     patties = [Patty(name="Turkey", quantity=10, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
     toppings = [Topping(name="Lettuce", quantity=10, cost=.25), Topping(name="Tomato", quantity=10, cost=.25), Topping(name="Pickles", quantity=10, cost=.25), \
     Topping(name="Cheese", quantity=10, cost=.25), Topping(name="Ketchup", quantity=10, cost=.25),
-     Topping(name="Mayo", quantity=10, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
+    Topping(name="Mayo", quantity=10, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
 
 
     # variables
@@ -141,7 +141,7 @@ class BurgerMachine:
     def handle_pay(self, expected, total):
         if self.currently_selecting != STAGE.Pay:
             raise InvalidStageException
-        if total == str(expected):
+        if total == f'{expected:.2f}':
             print("Thank you! Enjoy your burger!")
             self.total_burgers += 1
             self.total_sales += expected # only if successful
@@ -155,7 +155,12 @@ class BurgerMachine:
 
     def calculate_cost(self):
         # TODO add the calculation expression/logic for the inprogress_burger
-        return 10000
+        ''' rr284 march 18 2023 '''
+        total = 0
+        for item in self.inprogress_burger:
+            total += item.cost
+
+        return total
 
     def run(self):
         try:
@@ -175,7 +180,7 @@ class BurgerMachine:
                 expected = self.calculate_cost()
                 # show expected value as currency format
                 # require total to be entered as currency format
-                total = input(f"Your total is {expected}, please enter the exact value.\n")
+                total = input(f"Your total is $ %.2f, please enter the exact value.\n" % expected)
                 self.handle_pay(expected, total)
                 
                 choice = input("What would you like to do? (order or quit)\n")
