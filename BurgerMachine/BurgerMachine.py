@@ -47,10 +47,10 @@ class BurgerMachine:
 
 
     buns = [Bun(name="No Bun", cost=0), Bun(name="White Burger Bun", cost=1), Bun("Wheat Burger Bun", cost=1.25),Bun("Lettuce Wrap", cost=1.5)]
-    patties = [Patty(name="Turkey", quantity=10, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
+    patties = [Patty(name="Turkey", quantity=1, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
     toppings = [Topping(name="Lettuce", quantity=10, cost=.25), Topping(name="Tomato", quantity=10, cost=.25), Topping(name="Pickles", quantity=10, cost=.25), \
     Topping(name="Cheese", quantity=10, cost=.25), Topping(name="Ketchup", quantity=10, cost=.25),
-    Topping(name="Mayo", quantity=10, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
+    Topping(name="Mayo", quantity=2, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
 
 
     # variables
@@ -142,7 +142,7 @@ class BurgerMachine:
         if self.currently_selecting != STAGE.Pay:
             raise InvalidStageException
         if total == f'{expected:.2f}':
-            print("Thank you! Enjoy your burger!")
+            print("Thank you rr284! Enjoy your burger! ")
             self.total_burgers += 1
             self.total_sales += expected # only if successful
             #print(f"Total sales so far {self.total_sales}")
@@ -165,25 +165,29 @@ class BurgerMachine:
     def run(self):
         try:
             if self.currently_selecting == STAGE.Bun:
-                bun = input(f"What type of bun would you like {', '.join(list(map(lambda c:c.name.lower(), filter(lambda c: c.in_stock(), self.buns))))}?\n")
+                bun = input(f"What type of bun would you like {', '.join(list(map(lambda c:c.name.lower(), filter(lambda c: c.in_stock(), self.buns))))}?\n\
+rr284 -> ")
                 self.handle_bun(bun)
                 self.print_current_burger()
             elif self.currently_selecting == STAGE.Patty:
-                patty = input(f"Would type of patty would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.patties))))}? Or type next.\n")
+                patty = input(f"Would type of patty would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.patties))))}? Or type next.\n\
+rr284 -> ")
                 self.handle_patty(patty)
                 self.print_current_burger()
             elif self.currently_selecting == STAGE.Toppings:
-                toppings = input(f"What topping would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
+                toppings = input(f"What topping would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n\
+rr284 -> ")
                 self.handle_toppings(toppings)
                 self.print_current_burger()
             elif self.currently_selecting == STAGE.Pay:
                 expected = self.calculate_cost()
                 # show expected value as currency format
                 # require total to be entered as currency format
-                total = input(f"Your total is $ %.2f, please enter the exact value.\n" % expected)
+                # rr284 March 18 2023
+                total = input(f"Your total is $ %.2f, please enter the exact value.\nrr284 -> " % expected)
                 self.handle_pay(expected, total)
                 
-                choice = input("What would you like to do? (order or quit)\n")
+                choice = input("What would you like to do? (order or quit)\nrr284 -> ")
                 if choice == "quit":
                     #exit() in recursive functions creates stackoverflow
                     # use return 1 to exit
@@ -193,19 +197,47 @@ class BurgerMachine:
             # quit
             print("Quitting the burger machine")
             sys.exit()
-        # handle OutOfStockException
+
+        except OutOfStockException:
             # show an appropriate message of what stage/category was out of stock
-        # handle NeedsCleaningException
+            '''rr284 march 18 2023'''
+            current_stage = str(self.currently_selecting).replace("STAGE.", "")
+            print(f"Sorry the {current_stage} is out of stock. Please choose from the available options")
+
+        except NeedsCleaningException:
             # prompt user to type "clean" to trigger clean_machine()
             # any other input is ignored
             # print a message whether or not the machine was cleaned
-        # handle InvalidChoiceException
+            '''rr284 March 18 2023'''
+            cleaning = input("Looks like the Machine needs cleaning before making another delicious Burger \n\
+please enter 'clean' to clean the Machine before proceeding to make another burger\n")
+            if cleaning.lower() == "clean" or cleaning.lower() == "wash":
+                print("The Machine is all cleaned up and ready for service\n")
+                self.clean_machine()
+
+        except InvalidChoiceException:
             # show an appropriate message of what stage/category was the invalid choice was in
-        # handle ExceededRemainingChoicesException
+            '''rr284 March 18 2023'''
+            current_stage = str(self.currently_selecting).replace("STAGE.", "")
+            print(f"This is an invalid choice. Please choose form the available {current_stage}.")
+
+        except ExceededRemainingChoicesException:
             # show an appropriate message of which stage/category was exceeded
             # move to the next stage/category
-        # handle InvalidPaymentException
+            '''rr284 March 18 2023'''
+            current_stage = str(self.currently_selecting).replace("STAGE.", "")
+            if current_stage == "Patty":
+                print("Limit on the number of Patties is exceded. Please proceed to choosing Toppings\n")
+                self.currently_selecting = STAGE.Toppings
+            if current_stage == "Toppings":
+                print("Limit on the number of Toppings are exceded. Please proceed towards Payment method\n")
+                self.currently_selecting = STAGE.Pay
+
+        except  InvalidPaymentException:
             # show an appropriate message
+            '''rr284 March 18 2023'''
+            print("The payed amount does not match the required sum. Please try again.")
+
         except:
             # this is a default catch all, follow the steps above
             print("Something went wrong")
