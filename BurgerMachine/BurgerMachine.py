@@ -50,7 +50,7 @@ class BurgerMachine:
     patties = [Patty(name="Turkey", quantity=10, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
     toppings = [Topping(name="Lettuce", quantity=10, cost=.25), Topping(name="Tomato", quantity=10, cost=.25), Topping(name="Pickles", quantity=10, cost=.25), \
     Topping(name="Cheese", quantity=10, cost=.25), Topping(name="Ketchup", quantity=10, cost=.25),
-    Topping(name="Mayo", quantity=2, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
+    Topping(name="Mayo", quantity=10, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
 
 
     # variables
@@ -145,7 +145,7 @@ class BurgerMachine:
             print("Thank you rr284! Enjoy your burger! ")
             self.total_burgers += 1
             self.total_sales += expected # only if successful
-            #print(f"Total sales so far {self.total_sales}")
+            print(f"Total sales so far {self.total_sales}")
             self.reset()
         else:
             raise InvalidPaymentException
@@ -202,7 +202,7 @@ rr284 -> ")
             # show an appropriate message of what stage/category was out of stock
             '''rr284 march 18 2023'''
             current_stage = str(self.currently_selecting).replace("STAGE.", "")
-            print(f"Sorry the {current_stage} is out of stock. Please choose from the available options")
+            print(f"Sorry the {current_stage} selected is out of stock. Please choose from the available options")
 
         except NeedsCleaningException:
             # prompt user to type "clean" to trigger clean_machine()
@@ -211,7 +211,7 @@ rr284 -> ")
             '''rr284 March 18 2023'''
             cleaning = input("\nLooks like the Machine needs cleaning before making another delicious Burger \n\
 please enter 'clean' to clean the Machine before proceeding to make another burger\n")
-            if cleaning.lower() == "clean" or cleaning.lower() == "wash":
+            if cleaning.lower() == "clean":
                 print("The Machine is all cleaned up and ready for service\n")
                 self.clean_machine()
 
