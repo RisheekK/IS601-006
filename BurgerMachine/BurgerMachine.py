@@ -47,7 +47,7 @@ class BurgerMachine:
 
 
     buns = [Bun(name="No Bun", cost=0), Bun(name="White Burger Bun", cost=1), Bun("Wheat Burger Bun", cost=1.25),Bun("Lettuce Wrap", cost=1.5)]
-    patties = [Patty(name="Turkey", quantity=1, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
+    patties = [Patty(name="Turkey", quantity=10, cost=1), Patty(name="Veggie", quantity=10, cost=1), Patty(name="Beef", quantity=10, cost=1)]
     toppings = [Topping(name="Lettuce", quantity=10, cost=.25), Topping(name="Tomato", quantity=10, cost=.25), Topping(name="Pickles", quantity=10, cost=.25), \
     Topping(name="Cheese", quantity=10, cost=.25), Topping(name="Ketchup", quantity=10, cost=.25),
     Topping(name="Mayo", quantity=2, cost=.25), Topping(name="Mustard", quantity=10, cost=.25),Topping(name="BBQ", quantity=10, cost=.25)] 
@@ -209,7 +209,7 @@ rr284 -> ")
             # any other input is ignored
             # print a message whether or not the machine was cleaned
             '''rr284 March 18 2023'''
-            cleaning = input("Looks like the Machine needs cleaning before making another delicious Burger \n\
+            cleaning = input("\nLooks like the Machine needs cleaning before making another delicious Burger \n\
 please enter 'clean' to clean the Machine before proceeding to make another burger\n")
             if cleaning.lower() == "clean" or cleaning.lower() == "wash":
                 print("The Machine is all cleaned up and ready for service\n")
