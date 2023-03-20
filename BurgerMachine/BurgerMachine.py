@@ -247,7 +247,7 @@ please enter 'clean' to clean the Machine before proceeding to make another burg
     def start(self):
         self.run()
 
-    
+
 if __name__ == "__main__":
     bm = BurgerMachine()
     bm.start()

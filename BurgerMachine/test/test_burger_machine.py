@@ -115,11 +115,11 @@ def test_calculated_cost(machine):
         machine.handle_toppings("done")
         if f"{machine.calculate_cost():.2f}" != f"{expected_cost:.2f}":
             assert False
+
         machine.handle_pay(machine.calculate_cost(), f"{expected_cost:.2f}")
     machine.reset()
     assert True
-            
-    
+
 ''' rr284 March 19 2023
     To test if the total sales cost is calculated properly for 3 different valid burgers 
     while maintaining the currency format.
@@ -164,10 +164,11 @@ def third_order(second_order, machine):
     return machine
 
 def test_total(third_order):
-    first_order_cost_expected = 3.25
-    second_order_cost_expected = 4.25
-    third_order_cost_expected = 4.00
-    assert third_order.total_sales == first_order_cost_expected + second_order_cost_expected + third_order_cost_expected
+    costOfFirstOrder = 3.25
+    costOfSecondOrder = 4.25
+    costOfThirdOrder = 4.00
+    sum = costOfFirstOrder + costOfSecondOrder + costOfThirdOrder
+    assert third_order.total_sales == sum
 
 def test_burger_increment(third_order):
     """ rr284 March 19 2023
