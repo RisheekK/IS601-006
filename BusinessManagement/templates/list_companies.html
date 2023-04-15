@@ -13,8 +13,17 @@
     limit (default 10)
     ensure all fields prefill with request arg data if provided
     #}
+    <!--rr284 April 9 2023-->
     <form method="GET">
         <div class="row">
+            <div class="col">
+                <label class="visually-hidden" for="fn">Company Name</label>
+                <input type="text" name="name" class="form-control" placeholder="Company Name" value="{{request.args.get('name', '')}}">
+            </div>
+            <div class="col">
+                <label class="visually-hidden" for="limit">Limit</label>
+                <input type="number" name="limit" class="form-control" placeholder="Limit" min="1" max="100" value="{{request.args.get('limit', 10)}}">
+            </div>
             {{country_state_selector(layout="horizontal")}}
             {{sort_filter(cols=[...])}}
             <div class="col">
@@ -30,9 +39,12 @@
             {% if rows and rows|length > 0 %}
             <thead>
                 <tr class="text-capitalize">
+                    <!--rr284 April 9 2023-->
                     {# generate th tags for each column to display #}
                     {# IMPORTANT use table column names as the headings, replace _ with space via filter #}
-
+                    
+                    <th>{{r | replace('_', ' ')}}</th>
+                    {% endfor %}
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -46,7 +58,26 @@
                 an edit button that passes the company id to company edit
                 a delete button that passes the company id and the request args to the company delete route
                 #}
-
+                <!--rr284 April 9 2023-->
+                <tr>   
+                    {% for k,v in r.items() %}
+                        {% if k == "website" %}
+                            <td>
+                                <a href="{{v}}">website</a>
+                            </td>
+                        {% else %}
+                            <td>{{v}}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>
+                        <a href="{{url_for('employee.search', company=r.get('id'))}}" class="btn btn-secondary btn-sm">View</a>
+                        <a href="{{url_for('company.edit', id=r.get('id'))}}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="{{url_for('company.delete', id=r.get('id'), **request.args)}}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr> 
+                {% endfor %}
+            </tbody>
+            {% else %}
             </tbody>
             {% else %}
             <tbody>
