@@ -6,6 +6,7 @@
 <div class="container-fluid">
     <div class="h1 text-center">{{request.args.get("company_name","")}} Employee Directory</div>
     <form method="GET">
+        <!--rr284 April 9 2023-->
         {# TODO
         build a horizontal filter/sort form with
         first_name (show as first name, but name should be fn)
@@ -16,7 +17,6 @@
         limit (default 10)
         ensure all fields prefill with request arg data if provided
         #}
-        <!--rr284 April 9 2023-->
         <div class="row">
             <div class="col">
                 <label class="visually-hidden" for="fn">First Name</label>
@@ -63,12 +63,11 @@
         </thead>
         <tbody>
             {# generate tr with td tags for each piece of data #}
-            <!--rr284 April 9 2023-->
-            
             {# in the last column add the following
             an edit button that passes the employee id to employee edit
             a delete button that passes the employee id and the request args to the employee delete route
             #}
+            <!--rr284 April 9 2023-->
             {% for r in rows %}
             <tr>   
                 {% for k,v in r.items() %}

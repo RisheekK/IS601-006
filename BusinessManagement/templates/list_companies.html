@@ -3,6 +3,7 @@
 {% block content %}
 {% from "country_state_selector.html" import country_state_selector %}
 {% from "sort_filter.html" import sort_filter %}
+
 <div class="container-fluid">
     <div class="h1 text-center">Company Directory</div>
     {# TODO
@@ -13,20 +14,20 @@
     limit (default 10)
     ensure all fields prefill with request arg data if provided
     #}
-    <!--rr284 April 9 2023-->
     <form method="GET">
+        <!--rr284 April 9 2023-->
         <div class="row">
             <div class="col">
                 <label class="visually-hidden" for="fn">Company Name</label>
                 <input type="text" name="name" class="form-control" placeholder="Company Name" value="{{request.args.get('name', '')}}">
             </div>
+            {{country_state_selector(layout="horizontal")}}
+            {{sort_filter(cols=allowed_columns)}}
             <div class="col">
                 <label class="visually-hidden" for="limit">Limit</label>
                 <input type="number" name="limit" class="form-control" placeholder="Limit" min="1" max="100" value="{{request.args.get('limit', 10)}}">
             </div>
-            {{country_state_selector(layout="horizontal")}}
-            {{sort_filter(cols=[...])}}
-            <div class="col">
+                <div class="col">
                 <input type="submit" class="btn btn-primary" value="Filter" />
             </div>
             <div class="col">
@@ -42,7 +43,7 @@
                     <!--rr284 April 9 2023-->
                     {# generate th tags for each column to display #}
                     {# IMPORTANT use table column names as the headings, replace _ with space via filter #}
-                    
+                    {% for r in rows[0] %}
                     <th>{{r | replace('_', ' ')}}</th>
                     {% endfor %}
                     <th>Actions</th>
@@ -59,6 +60,7 @@
                 a delete button that passes the company id and the request args to the company delete route
                 #}
                 <!--rr284 April 9 2023-->
+                {% for r in rows %}
                 <tr>   
                     {% for k,v in r.items() %}
                         {% if k == "website" %}
@@ -76,8 +78,6 @@
                     </td>
                 </tr> 
                 {% endfor %}
-            </tbody>
-            {% else %}
             </tbody>
             {% else %}
             <tbody>

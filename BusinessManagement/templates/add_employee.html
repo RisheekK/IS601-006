@@ -6,14 +6,7 @@
     <div class="h1">Add Employee</div>
     <div>
         <form method="POST">
-            {#
-            generate fields with proper types for
-            first_name (required)
-            last_name (required)
-            email (required)
-            if a validation error occurs, the inserted form data should persist
-            #}
-            <!--# rr284 April 10 2023-->
+            <!--rr284 April 9 2023-->
             <label class="form-label" for="first_name">First Name: </label><br>
             <input type="text" class="form-control" id="first_name" name="first_name" value="{{request.form.get('first_name') or ''}}" required>
             <br>
@@ -23,9 +16,17 @@
             <label class="form-label" for="email">Email: </label><br>
             <input type="email" class="form-control" id="email" name="email" value="{{request.form.get('email') or ''}}" required>
             <br><br>
+            {#
+            generate fields with proper types for
+            first_name (required)
+            last_name (required)
+            email (required)
+            if a validation error occurs, the inserted form data should persist
+            #}
             <label for="company">Company: </label><br>
             {# use the below for company selection #}
-            {{ company_dropdown() }}
+            {{ company_dropdown(request.args.get('company')) }}
+            <br>
             <input type="submit" class="btn btn-primary" value="Save Employee" />
         </form>
     </div>

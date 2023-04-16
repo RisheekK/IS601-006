@@ -17,10 +17,7 @@
             website (not required)
             and prefill the fields with loaded company data
             #}
-
-            {# use this for country/state selection #}
-            {{country_state_selector(country=company.country, state=company.state)}}
-            <!--# rr284 April 10 2023 -->
+            <!--rr284 April 9 2023-->
             <label class="form-label" for="name">Name:</label>
             <input type="text" class="form-control" id="name" name="name" required value="{{row.name}}">
             <br><br>
@@ -31,6 +28,8 @@
             <input type="city" class="form-control" id="city" name="city" required value="{{row.city}}">
             <br><br>
             <label class="form-label" for="state/country">State/Country:</label>
+            {# use this for country/state selection #}
+            {{country_state_selector(country=country, state=state)}}
             <label class="form-label" for="zip">Zip:</label>
             <input type="zip" class="form-control" id="zip" name="zip" required value="{{row.zip}}">
             <br><br>

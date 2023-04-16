@@ -7,16 +7,7 @@
     <div class="h1">Edit Employee</div>
     <div>
         <form method="POST">
-            {#
-            generate fields with proper types for
-            first_name (required)
-            last_name (required)
-            email (required)
-            and prefill the fields with loaded employee data
-            #}
-            {# use the below for company selection #}
-            {{ company_dropdown(employee.company) }}
-            <!--# rr284 April 10 2023-->
+            <!--rr284 April 9 2023-->
             <label class="form-label" for="first_name">First Name:</label>
             <input type="text" class="form-control" id="first_name" name="first_name" value="{{row.first_name}}" required >
             <br><br>
@@ -25,8 +16,17 @@
             <br><br>
             <label class="form-label" for="email">Email:</label>
             <input type="email" class="form-control" id="email" name="email" value="{{row.email}}" required >
+            {#
+            generate fields with proper types for
+            first_name (required)
+            last_name (required)
+            email (required)
+            and prefill the fields with loaded employee data
+            #}
+            {# use the below for company selection #}
             <br><br>
             <label for="company">Company:</label>
+            {{company_dropdown(company)}}
             <input type="submit" class="btn btn-primary" value="Save Employee" />
         </form>
     </div>
