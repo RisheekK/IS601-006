@@ -7,6 +7,24 @@
     <div class="h1">Add Company</div>
     <div>
         <form method="POST">
+            <!--r284 April 9 2023-->
+            <label class="form-label" for="name">Name: </label><br>
+            <input type="text" class="form-control" id="name" name="name" value="{{request.form.get('name') or ''}}" required>
+            <br>
+            <label class="form-label" for="address">Address: </label><br>
+            <input type="text" class="form-control" id="address" name="address" value="{{request.form.get('address') or ''}}" required>
+            <br>
+            <label class="form-label" for="city">City: </label><br>
+            <input type="text" class="form-control" id="city" name="city" value="{{request.form.get('city') or ''}}" required>
+            <br><br>
+            {# use this for country/state selection #}
+            {{country_state_selector()}}
+            <br>
+            <label class="form-label" for="zip">ZIP Code: </label><br>
+            <input type="text" class="form-control" id="zip" name="zip" value="{{request.form.get('zip') or ''}}" required>
+            <br>
+            <label class="form-label" for="website">Website: </label><br>
+            <input type="url" class="form-control" id="website" name="website" value="{{request.form.get('website') or ''}}">
             {#
             using regular html generate fields (labels and input) with proper types for
             name (required)
@@ -17,9 +35,7 @@
             website (optional)
             if a validation error occurs, the inserted form data should persist
             #}
-
-            {# use this for country/state selection #}
-            {{country_state_selector()}}
+            <br><br>
             <input type="submit" class="btn btn-primary" value="Save Company" />
         </form>
     </div>
