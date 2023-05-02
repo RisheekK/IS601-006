@@ -14,6 +14,9 @@ print(CURR_DIR)
 sys.path.append(CURR_DIR)
 
 # custom error pages
+def unauthorized(e):
+    return render_template('401.html'), 401
+
 def page_not_found(e):
     return render_template('404.html'), 404
 
@@ -25,6 +28,7 @@ login_manager = flask_login.LoginManager()
 # app = Flask(__name__)
 def create_app(config_filename=''):
     app = Flask(__name__)
+    app.register_error_handler(401, unauthorized)
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(403, permission_denied)
     app.secret_key = os.environ.get("SECRET_KEY", "missing_secret")
@@ -81,11 +85,7 @@ def create_app(config_filename=''):
                     identity.provides.add(RoleNeed(role.name))
         return app
 
-
-
-
 app = create_app()
 
-
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5050)))
