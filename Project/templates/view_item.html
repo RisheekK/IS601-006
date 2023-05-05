@@ -6,11 +6,15 @@
             <h5 class="card-title">{{ rows.get('name') }}</h5>
             <br>
             {% for k,v in rows.items() %}
+            {% if k=='image'%}
+            <span class="label label-default">{{k}}: <img src="{{v}}" style="aspect-ratio: 1; width:100%"></span>
+            {% else %}
             <span class="label label-default">{{k}}: {{v}}</span>
+            {% endif %}
             <br>
             <br>
             {% endfor %}
-            {% if current_user.has_role("Admin") %}
+            {% if current_user.is_authenticated and current_user.has_role("Admin") %}
             <form action="{{url_for('admin.item')}}?id={{rows['id']}}" method="POST">
                 <input type="submit" value="edit" />
             </form>

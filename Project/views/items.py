@@ -61,6 +61,7 @@ def shop_item():
 @login_required
 def cart():
     # rr284 22 April 2023
+    
     item_id = request.form.get("item_id")
     id = request.form.get("id", item_id)
     print("id", id)
