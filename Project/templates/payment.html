@@ -3,6 +3,7 @@
 
 {% block content %}
 <div class="container-fluid">
+    <div class="box3">
     <form class="form-group mb-3 align-items-center" action="{{url_for('shop.place_order')}}"
             method="POST">
         <div class="col-12 text-center">
@@ -24,5 +25,6 @@
         <input type="hidden" name="address" value="{{request.form.get('address') or form.get('address') or ''}}" />
         <input type="hidden" name="payment" value="{{request.form.get('payment') or form.get('payment') or ''}}" />
     </form>
+</div>
 </div>
 {% endblock %}
