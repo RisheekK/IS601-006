@@ -4,8 +4,8 @@
 <!-- content -->
 {% block content %}
 <div class="container-fluid">
-    <div class="h4">Cart</div>
-    <table class="table text-light bg-dark">
+    <div class="h4" style="color:white">Cart</div>
+    <table class="table text-light" style="background-color: rgba(0, 0, 0, 0.50);">
         <thread>
             <tr>
                 <th>Item</th>
@@ -29,7 +29,7 @@
                             </div>
                             <div class="col d-grid">
                                 <input type="submit" value="Update"
-                                    class="btn btn-secondary btn-sm" />
+                                    class="btn btn-dark btn-sm" />
                             </div>
                         </div>
                     </form>
@@ -43,7 +43,9 @@
                         <input type="submit" value="x" class="btn btn-danger btn-sm" />
                     </form>
                 </td>
+                <td>
                 <!-- lazy delete using quantity < 0 logic -->
+                </td>
                 {# https://stackoverflow.com/a/51880609 #}
                 {% set ns.total = ns.total + row['subtotal'] %}
             </tr>
@@ -55,5 +57,10 @@
             </tr>
         </tbody>
     </table>
+    <div style="float:right">
+    <form action="{{url_for('shop.confirm_order')}}" method="POST">
+        <input type="submit" value="Place Order" class="btn btn-dark btn-sm"/>
+    </form>
+</div>
 </div>
 {% endblock %}

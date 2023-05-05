@@ -2,6 +2,7 @@
 {% block title %}Assign Roles{% endblock %}
 {% block content %}
 <div class="container-fluid">
+    <div class="list">
     <div class="h1">Assign Roles</div>
     <form method="GET">
         <input type="text" placeholder="Partial email address"
@@ -13,7 +14,7 @@
         <!-- will map elements via form attribute on the element itself by form id -->
         <input type="submit" class="btn btn-primary" value="Apply Roles" />
     </form>
-    <table class="table">
+    <table class="table text-light">
         <thead>
             <tr>
                 <td>Users</td>
@@ -24,7 +25,7 @@
             <tr>
                 <td>
                     <!-- users -->
-                    <table class="table table-stripped table-bordered">
+                    <table class="table table-stripped table-bordered text-light">
                         {% set rows = users %}
                         {% if rows and rows|length > 0 %}
                         <thead>
@@ -54,7 +55,7 @@
                 </td>
                 <td>
                     <!-- roles -->
-                    <table class="table table-stripped table-bordered">
+                    <table class="table table-stripped table-bordered text-light">
                         {% set rows = roles %}
                         {% if rows and rows|length > 0 %}
                         <thead>
@@ -85,7 +86,7 @@
             </tr>
         </tbody>
     </table>
-
+</div>
 </div>
 </div>
 {% endblock %}

@@ -60,6 +60,8 @@ def item():
 @admin.route("/admin/view_item", methods=["GET","POST"])
 @admin_permission.require(http_exception=403)
 def view_item():
+    #rr284 May 4 2023
+
     try:
         id = request.args.get("id", None)
         result = DB.selectOne("SELECT id, name, description, stock, unit_price, image FROM IS601_S_Items WHERE id = %s", id)
@@ -104,3 +106,61 @@ def items():
         print(tb.format_exc())
         flash("problem loading items", "danger")
     return render_template("admin_items.html", rows=rows)
+
+@admin.route("/admin/orders", methods=["GET","POST"])
+@admin_permission.require(http_exception=403)
+def orders():
+    # rr284 April 22 2023
+
+    rows = []
+    try:
+        result = DB.selectAll("""
+        SELECT o.id, u.username, total_price, number_of_items, o.created 
+        FROM IS601_S_Orders o
+        JOIN IS601_Users u on o.user_id = u.id 
+        """)
+        if result.status and result.rows:
+            rows = result.rows
+    except Exception as e:
+        print("Error getting orders", e)
+        flash("Error fetching orders", "danger")
+    return render_template("orders.html", rows=rows)
+
+@admin.route("/admin/order", methods=["GET"])
+@admin_permission.require(http_exception=403)
+def order():
+    # rr284 April 22 2023
+
+    rows = []
+    total = 0
+    id = request.args.get("id")
+    if not id:
+        flash("Invalid order", "danger")
+        return redirect(url_for("shop.orders"))
+    try:
+        # Query for users to only see their order information
+        
+        result = DB.selectAll("""
+        SELECT name, oi.unit_price, oi.quantity, (oi.unit_price*oi.quantity) as subtotal 
+        FROM IS601_S_OrderItems oi 
+        JOIN IS601_S_Items i on oi.item_id = i.id 
+        WHERE order_id = %s
+        """, id)
+        if result.status and result.rows:
+            rows = result.rows
+            total = sum(int(row["subtotal"]) for row in rows)
+        result = DB.selectAll("""
+        SELECT first_name, last_name, address, payment_method
+        FROM IS601_S_Orders where id=%s
+        """, id)
+        if result.status and result.rows:
+            order_info = result.rows
+    except Exception as e:
+        print("Error getting order", e)
+        flash("Error fetching order", "danger")
+        rows = []
+        total = None
+        order_info = []
+    print(rows)
+    print(order_info)
+    return render_template("order.html", rows=rows, total=total, order_info=order_info )

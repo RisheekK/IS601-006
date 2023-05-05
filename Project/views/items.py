@@ -12,7 +12,7 @@ def shop_list():
     
     rows = []
     query = """SELECT id, name, description, stock, unit_price, image
-               FROM IS601_S_Items WHERE visibility = 1"""
+                FROM IS601_S_Items WHERE visibility = 1"""
     args = [] # <--- append values to replace %s placeholders
     allowed_columns = ["name", "description", "unit_price"]
     for filter in allowed_columns[:-1]:
@@ -61,10 +61,11 @@ def shop_item():
 @login_required
 def cart():
     # rr284 22 April 2023
+
     item_id = request.form.get("item_id")
     id = request.form.get("id", item_id)
     print("id", id)
-    quantity = request.form.get("quantity", 1, type=int)
+    quantity = request.form.get("quantity", 1 , type=int)
     user_id = current_user.get_id()
     if id and user_id:
         if quantity > 0:
@@ -107,6 +108,7 @@ def cart():
                             })
                             if result.status:
                                 flash(f"Added {quantity} of {name} to cart", "success")
+                                return redirect("../shop")
             except Exception as e:
                 print("Error updating cart" ,e)
                 flash("Error updating cart", "danger")
@@ -130,3 +132,250 @@ def cart():
         print("Error getting cart", e)
         flash("Error fetching cart", "danger")
     return render_template("cart.html", rows=rows)
+
+@shop.route("/confirm_order", methods=["GET","POST"])
+@login_required
+def confirm_order():
+    # rr284 May 4 2023
+
+    cart = []
+    total = 0
+    try:
+        # get cart to verify
+        result = DB.selectAll("""SELECT c.id, item_id, name, c.quantity, i.stock, c.unit_price as cart_cost, i.unit_price as item_cost, (c.quantity * c.unit_price) as subtotal 
+        FROM IS601_S_Cart c JOIN IS601_S_Items i on c.item_id = i.id
+        WHERE c.user_id = %s
+        """, current_user.get_id())
+        if result.status and result.rows:
+            cart = result.rows
+        # verify cart
+        has_error = False
+        for item in cart:
+            if item["quantity"] > item["stock"]:
+                flash(f"Item {item['name']} doesn't have enough stock left", "warning")
+                has_error = True
+                if item["stock"] == 0:
+                    result = DB.delete("DELETE FROM IS601_S_Cart where item_id = %s and user_id = %s", item["item_id"], current_user.get_id())
+                    flash(f"Deleting item: {item['name']} from your cart", "warning")
+                else:
+                    result = DB.insertOne("""
+                            UPDATE IS601_S_Cart SET
+                            quantity = %(quantity)s,
+                            WHERE item_id = %(id)s and user_id = %(user_id)s
+                            """,{
+                                "id":id,
+                                "quantity": item["stock"],
+                                "item_id":item["item_id"],
+                                "user_id":item['user_id']
+                            })
+                    if result.status:
+                        flash(f"Updated quantity for {item['name']} to {item['stock']}", "warning")
+            if item["cart_cost"] != item["item_cost"]:
+                flash(f"Item {item['name']}'s price has changed, please refresh cart", "warning")
+                has_error = True
+                result = DB.insertOne("""
+                            UPDATE IS601_S_Cart SET
+                            unit_price = %(cost)s,
+                            WHERE item_id = %(id)s and user_id = %(user_id)s
+                            """,{
+                                "id":id,
+                                "cost": item["item_cost"],
+                                "item_id":item["item_id"],
+                                "user_id":item['user_id']
+                            })
+                if result.status:
+                    flash(f"Updated cost for {item['name']} to {item['item_cost']}")
+            total += float(item["subtotal"] or 0) 
+        if has_error:
+            return redirect(url_for("shop.cart"))
+    except Exception as e:
+        print("Transaction exception", e)
+        flash("Something went wrong", "danger")
+        tb.print_exc()
+        return redirect(url_for("shop.cart"))
+    # TODO route to thank you / summary page
+    # TODO add link from cart page to this route
+    return render_template("pending_order.html", rows=cart, total=total)
+
+@shop.route("/place_order", methods=["GET","POST"])
+@login_required
+def place_order():
+    # rr284 May 4 2023
+
+    total = float(request.form.get('total', 0))
+    total = f"{total:.2f}"
+    money_received = float(request.form.get("money_received", 0))
+    if money_received and f"{money_received:.2f}" == total:
+        flash("Payment received, proceeding to place order", "success")
+    elif money_received:
+        flash("Received payment is not equal to the total cost, aborting order", "danger")
+        flash("Any amount debited will be refunded in 3-4 business days", "warning")
+        return redirect(url_for("shop.cart"))
+    else:
+        flash("Payment Failed, Please try again")
+        return redirect(url_for("shop.cart"))
+    cart = []
+    total = 0
+    quantity = 0
+    order = {}
+    try:
+        DB.getDB().autocommit = False # make a transaction
+
+        # get cart to verify
+        
+        result = DB.selectAll("""SELECT c.id, item_id, name, c.quantity, i.stock, c.unit_price as cart_cost, i.unit_price as item_cost, (c.quantity * c.unit_price) as subtotal 
+        FROM IS601_S_Cart c JOIN IS601_S_Items i on c.item_id = i.id
+        WHERE c.user_id = %s
+        """, current_user.get_id())
+        if result.status and result.rows:
+            cart = result.rows
+        # verify cart
+        has_error = False
+        for item in cart:
+            if item["quantity"] > item["stock"]:
+                flash(f"Item {item['name']} doesn't have enough stock left", "warning")
+                has_error = True
+            if item["cart_cost"] != item["item_cost"]:
+                flash(f"Item {item['name']}'s price has changed, please refresh cart", "warning")
+                has_error = True
+            total += int(item["subtotal"] or 0)
+            quantity += int(item["quantity"])
+        
+        # create order data
+        order_id = -1
+        if not has_error:
+            result = DB.insertOne("""INSERT INTO IS601_S_Orders (first_name, last_name,
+                                total_price, number_of_items, user_id, address, payment_method,
+                                money_received)
+                                VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""", 
+                                request.form.get('fname'), request.form.get('lname'),
+                                total, quantity, int(current_user.get_id()),
+                                request.form.get('address'),request.form.get('payment'),
+                                money_received)
+            if not result.status:
+                flash("Error generating order", "danger")
+                DB.getDB().rollback()
+                has_error = True
+            else:
+                order_id = int(DB.db.fetch_eof_status()["insert_id"])
+                order["order_id"] = order_id
+                order["total"] = total
+                order["quantity"] = quantity
+        # record order history
+        if order_id > -1 and not has_error:
+            # Note: Not really an insert 1, it'll copy data from Table B into Table A
+            result = DB.insertOne("""INSERT INTO IS601_S_OrderItems (quantity, unit_price, order_id, item_id, user_id)
+            SELECT quantity, unit_price, %s, item_id, user_id FROM IS601_S_Cart c WHERE c.user_id = %s""",
+            order_id, current_user.get_id())
+            if not result.status:
+                flash("Error recording order history", "danger")
+                has_error = True
+                DB.getDB().rollback()
+        # update stock based on cart data
+        if not has_error:
+            result = DB.update("""
+            UPDATE IS601_S_Items 
+                set stock = stock - (select IFNULL(quantity, 0) FROM IS601_S_Cart WHERE item_id = IS601_S_Items.id and user_id = %(uid)s),
+                visibility = (select if(stock - (select IFNULL(quantity, 0) FROM IS601_S_Cart WHERE item_id = IS601_S_Items.id and user_id = %(uid)s)>0, 1, 0) 
+                FROM IS601_S_Cart WHERE item_id = IS601_S_Items.id and user_id = %(uid)s) 
+                WHERE id in (SELECT item_id from IS601_S_Cart where user_id = %(uid)s)
+            """, {"uid":current_user.get_id()} )
+            if not result.status:
+                flash("Error updating stock", "danger")
+                has_error = True
+                DB.getDB().rollback()
+
+        # empty the cart
+        if not has_error:
+            result = DB.delete("DELETE FROM IS601_S_Cart WHERE user_id = %s", current_user.get_id())
+    
+        if not has_error:
+            DB.getDB().commit()
+            flash("Purchase successful!", "success")
+        else:
+            return redirect(url_for("shop.cart"))
+        order_info = [{"First_name": request.form.get('fname'),
+                        "Last_name": request.form.get('lname'),
+                        "Address": request.form.get('address'),
+                        "Payment_Method": request.form.get('payment')
+                        }]
+    except Exception as e:
+        print("Transaction exception", e)
+        flash("Something went wrong", "danger")
+        flash("Any amount debited will be refunded in 2-4 business days", "warning")
+        tb.print_exc()
+        return redirect(url_for("shop.cart"))
+    return render_template("order_summary.html", rows=cart, order=order, order_info=order_info)
+
+@shop.route("/payment", methods=["POST"])
+@login_required
+def payment():
+    # rr284 May 4 2023
+    missing = False
+    reqd_fields = ['fname', 'lname', 'address', 'payment']
+    form_data = {}
+    for field in reqd_fields:
+        if not request.form.get(field):
+            flash(f"Missing Required Field: {field}, Please Try again", "danger")
+            missing = True
+        else:
+            form_data[field] = request.form.get(field)
+    print(missing)
+    if missing:
+        return redirect(url_for("shop.confirm_order"))
+    return render_template("payment.html", form=form_data)
+
+@shop.route("/orders", methods=["GET"])
+@login_required
+def orders():
+    # rr284 May 4 2023
+
+    rows = []
+    try:
+        result = DB.selectAll("""
+        SELECT id, total_price, number_of_items, created FROM IS601_S_Orders WHERE user_id = %s
+        """, current_user.get_id())
+        if result.status and result.rows:
+            rows = result.rows
+    except Exception as e:
+        print("Error getting orders", e)
+        flash("Error fetching orders", "danger")
+    return render_template("orders.html", rows=rows)
+
+@shop.route("/order", methods=["GET"])
+@login_required
+def order():
+    # rr284 May 4 2023
+
+    rows = []
+    total = 0
+    id = request.args.get("id")
+    if not id:
+        flash("Invalid order", "danger")
+        return redirect(url_for("shop.orders"))
+    try:
+        # Query to only get USER ID and Order ID so the user only sees their order info
+        result = DB.selectAll("""
+        SELECT name, oi.unit_price, oi.quantity, (oi.unit_price*oi.quantity) as subtotal 
+        FROM IS601_S_OrderItems oi 
+        JOIN IS601_S_Items i on oi.item_id = i.id 
+        WHERE order_id = %s ANd user_id = %s
+        """, id, current_user.get_id())
+        if result.status and result.rows:
+            rows = result.rows
+            total = sum(int(row["subtotal"]) for row in rows)
+        result = DB.selectAll("""
+        SELECT first_name, last_name, address, payment_method
+        FROM IS601_S_Orders where id=%s
+        """, id)
+        if result.status and result.rows:
+            order_info = result.rows
+    except Exception as e:
+        print("Error getting order", e)
+        flash("Error fetching order", "danger")
+        rows = []
+        total = None
+        order_info = []
+    print(rows)
+    print(order_info)
+    return render_template("order.html", rows=rows, total=total, order_info=order_info )

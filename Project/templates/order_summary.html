@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% from "_table_helper.html" import render_table %}
+{% block title %}Order Confirmation{% endblock %}
+
+<!-- content -->
+{% block content %}
+<div class="container-fluid">
+    <div class="list">
+<div class="h2">Order Summary:</div>
+<div class="h3">Order Number #{{order['id']}}:</div>
+
+<div class="table table-stripped table-bordered text-light">
+{{render_table("Address and Billing Details", order_info , [])}}
+</div>
+<br>
+<br>
+<table class="table table-stripped table-bordered text-light">
+{{render_table("Ordered Items", rows, ["user_id"])}}
+</table>
+<div class="h3">Order Total: ${{order['total']}}</div>
+<br>
+<div class="h4">Thank you for ordering! Your order should reach you in 2-3 Business days. Happy Shopping!</div>
+</div>
+{% endblock %}
