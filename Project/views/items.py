@@ -108,6 +108,7 @@ def cart():
                             })
                             if result.status:
                                 flash(f"Added {quantity} of {name} to cart", "success")
+                                return redirect("../shop")
             except Exception as e:
                 print("Error updating cart" ,e)
                 flash("Error updating cart", "danger")

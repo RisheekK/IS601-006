@@ -28,28 +28,19 @@
                 </li>
 
                 <!-- roles nav (requires admin )-->
-                {% if current_user.has_role("Admin") %}
+                {% if current_user.is_authenticated and current_user.has_role("Admin") %}
                 {% set roles = [
-                ("roles.add", "Add"),
-                ("roles.list", "List"),
-                ("roles.assign", "Assign")
-                ] %}
+                    ("roles.add", "Add"),
+                    ("roles.list", "List"),
+                    ("roles.assign", "Assign")
+                    ] %}
                 {{dropdown_nav("Roles", roles)}}
-                {% endif %}
-                {% if current_user.has_role("Admin") %}
                 {% set admin = [
-                ("admin.add_item", "Add Item"),
-                ("admin.view_items", "List Items"),
-                ("admin.view_items","View Orders"),
-                ] %}
+                    ("admin.item", "Add item"),
+                    ("admin.items", "List items"),
+                    ("admin.orders", "View Orders")    
+                    ] %}
                 {{dropdown_nav("Admin", admin)}}
-                {% elif current_user.has_role("Store Owner") %}
-                {% set admin = [
-                ("admin.add_item", "Add Item"),
-                ("admin.view_items", "List Items"),
-                ("admin.orders","View Orders"),
-                ] %}
-                {{dropdown_nav("Owner", admin)}}
                 {% endif %}
                 {% endif %}
             </ul>
