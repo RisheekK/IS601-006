@@ -2,13 +2,28 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 {% from "_formhelpers.html" import render_field %}
+<style>
+    body {
+        background-image: url("/static/default.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;  
+        background-size: cover;
+    }
+</style>
 <div class="container-fluid">
-    <div class="h3">Login</div>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {{render_field(form.email)}}
-        {{render_field(form.password)}}
-        {{form.submit(class="btn btn-primary")}}
-    </form>
+    <div class = "box"><div class="text-center">
+        <div class="h3">Login</div>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{render_field(form.email)}}
+            {{render_field(form.password)}}
+            {{form.submit(class="btn btn-primary")}}
+            <br>
+            <br>
+            <font size="+5" color="Blue"> Zeta</font>
+        </form>
+    </div>
+    </div>
 </div>
+
 {% endblock %}
