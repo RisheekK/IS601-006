@@ -65,7 +65,7 @@ def cart():
     item_id = request.form.get("item_id")
     id = request.form.get("id", item_id)
     print("id", id)
-    quantity = request.form.get("quantity", 1, type=int)
+    quantity = request.form.get("quantity", type=int)
     user_id = current_user.get_id()
     if id and user_id:
         if quantity > 0:
