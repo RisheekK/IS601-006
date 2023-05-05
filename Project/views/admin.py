@@ -11,6 +11,7 @@ admin = Blueprint('admin', __name__, url_prefix='/',template_folder='templates')
 @admin_permission.require(http_exception=403)
 def item():
     # rr284 April 22 2023
+    
     form = ItemForm()
     id = request.args.get("id", form.id.data or None)
     type = "Edit" if id else "Create"
