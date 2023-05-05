@@ -2,7 +2,7 @@
 {% block title %}Profile{% endblock %}
 {% block content %}
 {% from "_formhelpers.html" import render_field %}
-<div class="container-fluid">
+<div class="container-fluid"><div class = "box"><div class="text-center">
     <div class="h3">Profile</div>
     <form method="POST">
         {{ form.hidden_tag() }}
@@ -13,5 +13,7 @@
         {{render_field(form.confirm)}}
         {{form.submit(class="btn btn-primary")}}
     </form>
+    </div>
+</div>
 </div>
 {% endblock %}
