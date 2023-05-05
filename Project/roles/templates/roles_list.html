@@ -1,9 +1,18 @@
 {% extends "layout.html" %}
 {% block title %}List Roles{% endblock %}
 {% block content %}
+<style>
+    body {
+            background-image: url("/static/stock.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;  
+            background-size: cover;
+        }
+</style>
 <div class="container-fluid">
+    <div class="list">
     <div class="h1">List Roles</div>
-    <table class="table">
+    <table class="table text-light" color="whitesmoke">
         {% if rows and rows|length > 0 %}
         <thead>
             <tr class="text-capitalize">
@@ -30,6 +39,7 @@
         <p>No results to show</p>
         {% endif %}
     </table>
+</div>
 </div>
 </div>
 {% endblock %}

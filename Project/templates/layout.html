@@ -9,6 +9,14 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
     <style>
+        body {
+            background-image: url("/static/blurmall.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;  
+            background-size: cover;
+            background-position: center;
+        }
+
         .footer {
             height:24px; 
             width: 100%;
@@ -34,7 +42,9 @@
         }
 
         .box{
-            background: lightgray;
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.682);
+            color: white;
             border-radius: 35px;
             height:700px;
             position: absolute;
@@ -46,6 +56,34 @@
             box-shadow: 10px 5px 5px grey;
         }
         
+        .bg-text {
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0, 0, 0, 0.614); 
+            color: white;
+            font-weight: bold;
+            border: 3px solid whitesmoke;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            width: 50%;
+            padding: 100px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .font1 {
+            font-family: URW Chancery L, cursive;
+        }
+
+        .list {
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0, 0, 0, 0.6); 
+            color: white;
+            position: absolute;
+            width: 99%;
+        }
         
     </style>
     <title>{% block title %}{% endblock %} -Zeta Shopping</title>
