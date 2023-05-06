@@ -1,6 +1,6 @@
 <table><tr><td> <em>Assignment: </em> IS601 Milestone 3 Shop Project</td></tr>
 <tr><td> <em>Student: </em> Risheek S Kumar Risheek S Kumar (rr284)</td></tr>
-<tr><td> <em>Generated: </em> 5/5/2023 7:53:47 PM</td></tr>
+<tr><td> <em>Generated: </em> 5/5/2023 8:13:10 PM</td></tr>
 <tr><td> <em>Grading Link: </em> <a rel="noreferrer noopener" href="https://learn.ethereallab.app/homework/IS601-006-S23/is601-milestone-3-shop-project/grade/rr284" target="_blank">Grading</a></td></tr></table>
 <table><tr><td> <em>Instructions: </em> <ol><li>Checkout Milestone3 branch</li><li>Create a new markdown file called milestone3.md</li><li>git add/commit/push immediate</li><li>Fill in the below deliverables</li><li>At the end copy the markdown and paste it into milestone3.md</li><li>Add/commit/push the changes to Milestone3</li><li>PR Milestone3 to dev and verify</li><li>PR dev to prod and verify</li><li>Checkout dev locally and pull changes to get ready for Milestone 4</li><li>Submit the direct link to this new milestone3.md file from your GitHub prod branch to Canvas</li></ol><p>Note: Ensure all images appear properly on GitHub and everywhere else. Images are only accepted from dev or prod, not localhost. All website links must be from prod (you can assume/infer this by getting your dev URL and changing dev to prod).</p></td></tr></table>
 <table><tr><td> <em>Deliverable 1: </em> Orders will be able to be recorded </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
@@ -22,6 +22,12 @@
 <tr><td> <em>Sub-Task 4: </em> Add a screenshot showing the items pending purchase from Heroku</td></tr>
 <tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/86208506/236576698-39dde4e0-56fc-4d31-a925-015085a8d6bf.png"/></td></tr>
 <tr><td> <em>Caption:</em> <p>Pending Purchase form with data filled. It has a link to go back<br>to cart and The items shown are non-editable.<br></p>
+</td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/86208506/236587257-7a70dfaa-e4d3-47ec-9b55-873190e6bc7b.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>Cart with item that has stock as zero (Air Jordan 1 mid).<br></p>
+</td></tr>
+<tr><td><img width="768px" src="https://user-images.githubusercontent.com/86208506/236587400-bfbe20f1-14dc-4d36-9b39-b7c9a26b8584.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>The item has been deleted from the user&#39;s cart and the reason is<br>shown in a flash message.<br></p>
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 5: </em> Add a screenshot showing the Order Process validations from the code</td></tr>
@@ -78,7 +84,7 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 3: </em> Briefly explain the logic for showing the purchase list and click/displaying the Order Details</td></tr>
-<tr><td> <em>Response:</em> <p>When the user clicks on view button all the items linked to the<br>order id is retrieved from the order items table along with the information<br>they've provided in the confirmation page from orders table.<br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p>When the user clicks on view button all the items linked to the order id is retrieved from the order items table along with the information they've provided in the confirmation page from orders table.<br></p><br></td></tr>
 <tr><td> <em>Sub-Task 4: </em> Add related pull request link(s)</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/RisheekK/IS601-006/pull/36">https://github.com/RisheekK/IS601-006/pull/36</a> </td></tr>
 <tr><td> <em>Sub-Task 5: </em> Add a direct link to heroku prod for this file</td></tr>
@@ -96,7 +102,7 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 3: </em> Briefly explain the logic for showing the purchase list and click/displaying the Order Details (mostly how it differs from the user's purchase history feature)</td></tr>
-<tr><td> <em>Response:</em> <p>similar logic to the purchase history is used here. But, the important distinction<br>is the query used/generated to retrieve the data.<div>we make a cross join with<br>the user table and the order table to retrieve the name of the buyer.</div><div>likewise when view is clicked the item ID is referred to pull in the data from orders and order items table.</div><br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p>similar logic to the purchase history is used here. But, the important distinction is the query used/generated to retrieve the data.<div>we make a cross join with the user table and the order table to retrieve the name of the buyer.</div><div>likewise when view is clicked the item ID is referred to pull in the data from orders and order items table.</div><br></p><br></td></tr>
 <tr><td> <em>Sub-Task 4: </em> Add related pull request link(s)</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/RisheekK/IS601-006/pull/36">https://github.com/RisheekK/IS601-006/pull/36</a> </td></tr>
 <tr><td> <em>Sub-Task 5: </em> Add a direct link to heroku prod for this file</td></tr>
@@ -109,6 +115,6 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 2: </em> Describe any issues and learnings throughout this milestone</td></tr>
-<tr><td> <em>Response:</em> <p>Faced difficulties writing SQL in code to join different tables.<div>Used forms to carry data whenever redirect is used since data is not lost when done so.</div><div>Played around with styling different elements of the page which helped to get more familiar with CSS.</div><div>Navigating between different pages were tricky as few of them worked on Get and the others on both.</div><div>The quantity element when adding to cart<br>was defaulting to one when I realized it was being redirected to a<br>anther endpoint.</div><div>MultiDict import helped a lot to handle data from rows from tables.<br></div><div>Learned<br>to work around with git to revert back to different commits as code changed were causing bugs and crashes.</div><div><br></div><div><br><div><br></div></div><br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p>Faced difficulties writing SQL in code to join different tables.<div>Used forms to carry data whenever redirect is used since data is not lost when done so.</div><div>Played around with styling different elements of the page which helped to get more familiar with CSS.</div><div>Navigating between different pages were tricky as few of them worked on Get and the others on both.</div><div>The quantity element when adding to cart<br>was defaulting to one when I realized it was being redirected to a<br>anther endpoint.</div><div>MultiDict import helped a lot to handle data from table rows.<br></div><div>Learned to work around with git to revert back to different commits as code changed were causing bugs and crashes.</div><div><br></div><div><br><div><br></div></div><br></p><br></td></tr>
 </table></td></tr>
 <table><tr><td><em>Grading Link: </em><a rel="noreferrer noopener" href="https://learn.ethereallab.app/homework/IS601-006-S23/is601-milestone-3-shop-project/grade/rr284" target="_blank">Grading</a></td></tr></table>
