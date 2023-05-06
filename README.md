@@ -1,4 +1,7 @@
 # IS601-006
 ## Risheek S Kumar
 
-### Master procastinator, and a Valorant God(I wish)
+### Full stack Dev, Football enthusiast, Valorant Pro :)
+
+### Final Demo of Shop Project:
+https://youtu.be/XBgV-zSZZhw
