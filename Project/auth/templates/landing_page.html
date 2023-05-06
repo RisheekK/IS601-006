@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
 {% block title %}Landing Page{% endblock %}
 {% block content %}
+
 <div class="container-fluid">
+    <div class="bg-text">
     <div class="h1 text-center text-capitalize">
-        <p style="font-size:50px; font-family:Algerian; color: blue;">Welcome</p>
+        <div class="font1">
+        <p style="font-size:50px">Welcome</p>
     {{current_user.username}}
+    </div>
+</div>
 </div>
 </div>
 {% endblock %}

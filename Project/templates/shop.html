@@ -4,7 +4,7 @@
 <!-- content -->
 {% block content %}
 <div class="container-fluid">
-    <div class="h4">Shop</div>
+    <div class="h4" style="color:white">Shop</div>
     <form class="row row-cols-lg-auto g-3 align-items-center" method="GET">
         <div class="col-12">
             <label class="visually-hidden" for="name">name</label>
@@ -34,7 +34,7 @@
     <div class="row">
         {% for row in rows %}
         <div class="col">
-            <div class="card text-light bg-dark border" style="width: 20em">
+            <div class="card text-light h-100" style="background-color: rgba(0, 0, 0, 0.50); width: 20em">
                 <div class="card-header">
                     Stock: {{row["stock"]}}
                 </div>
@@ -56,22 +56,22 @@
                     <form action="{{url_for('shop.shop_item')}}" method="POST">
                         <input type="hidden" name="id" value="{{row['id']}}" />
                         <div class="d-grid mt-1">
-                            <input type="submit" value="View" class="btn btn-light" />
+                            <input type="submit" value="View" class="btn btn-dark" />
                         </div>
                     </form>
                     {% if current_user.has_role("Admin") %}
                     <form action="{{url_for('admin.item')}}" method="POST">
                         <input type="hidden" name="id" value="{{row['id']}}" />
                         <div class="d-grid mt-1">
-                            <input type="submit" value="Edit" class="btn btn-light" />
+                            <input type="submit" value="Edit" class="btn btn-dark" />
                         </div>
                     </form>
                     {% endif %}
                     <form action="{{url_for('shop.cart')}}" method="POST">
                         <input type="hidden" name="id" value="{{row['id']}}" />
-                        <input type="number" class="form-control" name="q" value="1" />
+                        <input type="number" class="form-control" name="quantity" placeholder="1" />
                         <div class="d-grid mt-1">
-                            <input type="submit" value="+Add" class="btn btn-light" />
+                            <input type="submit" value="+Add" class="btn btn-dark" />
                         </div>
                     </form>
                 </div>
